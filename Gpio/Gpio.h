@@ -39,7 +39,6 @@
 #define NOK 1;
 
 void Gpio_ConfigPin(uint8 PortName, uint8 PinNum, uint8 PinMode, uint8 DefaultState);
-void Gpio_WritePin(uint8 PortName, uint8 PinNum, uint8 Data);
 uint8 Gpio_ReadPin(uint8 PortName, uint8 PinNum);
 
 
