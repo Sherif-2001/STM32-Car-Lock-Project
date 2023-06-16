@@ -4,8 +4,9 @@ TIM_TypeDef* TIM2 = (TIM_TypeDef*)TIM2_BASE_ADD;
 void GPT_Init(void){
 
 	Rcc_Enable(RCC_TIM2);
-	TIM2->PSC=3999;
+	TIM2->PSC=2999;
 	SET_BIT(TIM2->DIER, 0);
+	SET_BIT(TIM2->EGR, 0);
 }
 void GPT_StartTimer(unsigned long int OverFlowTicks){
 
