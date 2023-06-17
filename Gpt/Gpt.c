@@ -19,9 +19,9 @@ void GPT_StartTimer(unsigned long int OverFlowTicks){
 
 unsigned char GPT_CheckTimeIsElapsed(void) {
 
-        if (((TIM2->SR)&1) &&((TIM2->CR1)&1))
+        if ((TIM2->CNT== TIM2->ARR-1) &&((TIM2->CR1)&1))
 	    {
-      	CLEAR_BIT(TIM2->SR, 0);
+        	char read_flag=(TIM2->SR &1);
 	        return 1;
 	    }
 	    return 0;
