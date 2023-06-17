@@ -3,26 +3,26 @@
 
 #include "Gpio_Private.h"
 
-uint32 GPIO_Addresses[4] = { GPIOA_BASE_ADDR, GPIOB_BASE_ADDR,GPIOC_BASE_ADDR,GPIOD_BASE_ADDR };
+// uint32 GPIO_Addresses[4] = { GPIOA_BASE_ADDR, GPIOB_BASE_ADDR,GPIOC_BASE_ADDR,GPIOD_BASE_ADDR };
 
 
-void Gpio_ConfigPin(uint8 PortName, uint8 PinNum, uint8 PinMode,
-		uint8 DefaultState) {
-	uint8 PortId = PortName - GPIO_A;
-	GpioType * gpioReg =  GPIO_Addresses[PortId];
+// void Gpio_ConfigPin(uint8 PortName, uint8 PinNum, uint8 PinMode,
+// 		uint8 DefaultState) {
+// 	uint8 PortId = PortName - GPIO_A;
+// 	GpioType * gpioReg =  GPIO_Addresses[PortId];
 
-	uint8 OutputState = DefaultState & 0x1;
-	uint8 InputState = DefaultState >> 1;
+// 	uint8 OutputState = DefaultState & 0x1;
+// 	uint8 InputState = DefaultState >> 1;
 
-	gpioReg->GPIO_MODER &= ~(0x3 << (2 * PinNum));
-	gpioReg->GPIO_MODER |= (PinMode << (2 * PinNum));
+// 	gpioReg->GPIO_MODER &= ~(0x3 << (2 * PinNum));
+// 	gpioReg->GPIO_MODER |= (PinMode << (2 * PinNum));
 
-	gpioReg->GPIO_OTYPER  &= ~(0x01 << PinNum);
-	gpioReg->GPIO_OTYPER |= (OutputState << PinNum);
+// 	gpioReg->GPIO_OTYPER  &= ~(0x01 << PinNum);
+// 	gpioReg->GPIO_OTYPER |= (OutputState << PinNum);
 
-	gpioReg->GPIO_PUPDR &= ~(0x3 << (2 * PinNum));
-	gpioReg->GPIO_PUPDR |= (InputState << (2*PinNum));
-}
+// 	gpioReg->GPIO_PUPDR &= ~(0x3 << (2 * PinNum));
+// 	gpioReg->GPIO_PUPDR |= (InputState << (2*PinNum));
+// }
 
 
 void GPIO_Init(void){
@@ -31,12 +31,28 @@ void GPIO_Init(void){
 	Rcc_Enable(RCC_GPIOD);
 	Rcc_Enable(RCC_SYSCFG);
 
-	Gpio_ConfigPin(GPIO_D, 5, GPIO_OUTPUT, GPIO_PUSH_PULL); //vehicle lock light
-    Gpio_ConfigPin(GPIO_D, 10, GPIO_OUTPUT, GPIO_PUSH_PULL);  // Hazard led
-    Gpio_ConfigPin(GPIO_D, 15, GPIO_OUTPUT, GPIO_PUSH_PULL);   // Ambient light led
+	uint32 i = 0;
+	for (i = 5; i <= 15; i+=5) {
 
-	Gpio_ConfigPin(GPIO_A, 0, GPIO_INPUT, Pull_up); //door handle
-	Gpio_ConfigPin(GPIO_A, 1, GPIO_INPUT, Pull_up);  //door button
+	 GpioType * gpioReg = GPIOD_BASE_ADDR;
+
+	 gpioReg->GPIO_MODER &= ~(0x3 << (2 * i));
+	 gpioReg->GPIO_MODER |= (GPIO_OUTPUT << (2 * i));
+
+	 gpioReg->GPIO_OTYPER  &= ~(0x01 << i);
+	 gpioReg->GPIO_OTYPER |= (GPIO_PUSH_PULL << i);
+	  }
+
+	for (i = 0; i <2; i++) {
+
+	 GpioType * gpioReg = GPIOA_BASE_ADDR;
+
+	 gpioReg->GPIO_MODER &= ~(0x3 << (2 * i));
+	 gpioReg->GPIO_MODER |= (GPIO_INPUT << (2 * i));
+
+         gpioReg->GPIO_PUPDR &= ~(0x3 << (2 * i));
+ 	 gpioReg->GPIO_PUPDR |= (Pull_up << (2*i));
+   }
 
 }
 
