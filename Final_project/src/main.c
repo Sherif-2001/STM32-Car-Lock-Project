@@ -109,8 +109,6 @@ int main()
 			nextBlinkTime += 500;							   // update next blink time
 			numberOfBlinks--;								   // update number of remaining blinks
 		}
-
-		previous_state2 = current_state2;
 	}
 	return 0;
 }
