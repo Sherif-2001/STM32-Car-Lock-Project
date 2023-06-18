@@ -8,7 +8,7 @@ void GPIO_Init(void)
 	uint32 pinNum = 0;
 	for (pinNum = 5; pinNum <= 15; pinNum += 5)
 	{
-		GpioType *gpioReg = GPIOD_BASE_ADDR;
+		GpioType *gpioReg = (GpioType *)GPIOD_BASE_ADDR;
 		gpioReg->GPIO_MODER &= ~(0x03 << (pinNum * 2));
 		gpioReg->GPIO_MODER |= (GPIO_OUTPUT << (pinNum * 2));
 
